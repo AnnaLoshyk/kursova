@@ -1,18 +1,18 @@
 from customtkinter import *
-from mini_pro import *
-import sqlite3
 import tkinter
 from tkinter.ttk import Separator
 from tkinter import messagebox
 from tkinter import *
-
+from db import Database
 class Application:
 
     def __init__(self, window):
 
         self.window = window
-        c.execute("SELECT * FROM appointments")
-        self.alldata = c.fetchall()
+        self.db = Database('database.db')
+        self.c = self.db.c
+        self.conn = self.db.conn
+        self.alldata = self.c.fetchall()
         # creating the frames in the window
         self.main = CTkFrame(window, width=450, height=400)
 
@@ -74,7 +74,7 @@ class Application:
         # show log
 
         sql2 = "SELECT id FROM appointments "
-        self.result = c.execute(sql2)
+        self.result = self.c.execute(sql2)
         for self.row in self.result:
             self.id = self.row[0]
             ids.append(self.id)
@@ -116,8 +116,8 @@ class Application:
             # c.execute(sql, (self.val1, self.val2, self.val3, self.val4, self.val5))
             sql = "INSERT INTO appointments (name, age, gender, location, phone) VALUES (?, ?, ?, ?, ?)"
             params = (self.val1, self.val2, self.val3, self.val4, self.val5)
-            c.execute(sql, params)
-            conn.commit()
+            self.cc.execute(sql, params)
+            self.conn.commit()
             tkinter.messagebox.showinfo("Success", "\n Appointment for " + str(self.val1) + " has been created")
         self.main.destroy()
         self.__init__(self.window)
@@ -179,7 +179,7 @@ class Application:
         self.input = self.idnet.get()
         # execute sql
         sql = "SELECT * FROM appointments WHERE id LIKE ?"
-        self.res = c.execute(sql, (self.input,))
+        self.res = self.c.execute(sql, (self.input,))
         for self.row in self.res:
             self.name1 = self.row[1]
             self.age = self.row[2]
@@ -237,8 +237,8 @@ class Application:
         self.var5 = self.ent5.get()
 
         query = "UPDATE appointments SET name=?, age=?, gender=?, location=?, phone=? WHERE id LIKE ?"
-        c.execute(query, (self.var1, self.var2, self.var3, self.var4, self.var5, self.idnet.get(),))
-        conn.commit()
+        self.c.execute(query, (self.var1, self.var2, self.var3, self.var4, self.var5, self.idnet.get(),))
+        self.conn.commit()
         tkinter.messagebox.showinfo("Updated", "Successfully Updated.")
         self.updateframe.destroy()
         self.__init__(self.window)
@@ -266,7 +266,7 @@ class Application:
         self.input = self.idnet.get()
         # execute sql
         sql = "SELECT * FROM appointments WHERE id LIKE ?"
-        self.res = c.execute(sql, (self.input,))
+        self.res = self.c.execute(sql, (self.input,))
         for self.row in self.res:
             self.name1 = self.row[1]
             self.age = self.row[2]
@@ -316,8 +316,8 @@ class Application:
 
     def delete2(self):
         sql2 = "DELETE FROM appointments WHERE id LIKE ?"
-        c.execute(sql2, (self.idnet.get(),))
-        conn.commit()
+        self.c.execute(sql2, (self.idnet.get(),))
+        self.conn.commit()
         tkinter.messagebox.showinfo("Success", "Deleted Successfully")
         self.ent1.destroy()
         self.ent2.destroy()
@@ -341,3 +341,18 @@ def menubar():
     file_menu.add_command(label="Delete", command=b.deletee)
     file_menu.add_separator()
     file_menu.add_command(label="Exit", command=window.quit)
+
+ids = []
+number = []
+patients = []
+
+window = CTk()
+b = Application(window)
+b.startpage()
+window.config(menu=menubar())
+window.title("Hospital Management")
+window.iconbitmap(r'medkit.ico')
+window.geometry("450x400")
+window.resizable(False, False)
+
+window.mainloop()
