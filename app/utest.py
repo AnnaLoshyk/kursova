@@ -1,7 +1,7 @@
 from customtkinter import *
 import sqlite3
 import unittest
-from mini_pro import Application
+from App import Application
 
 class ApplicationTests(unittest.TestCase):
 
@@ -30,16 +30,16 @@ class ApplicationTests(unittest.TestCase):
 
     def test_add_appointment(self):
         app = Application(a)
-        app.name_ent = CTkEntry(a, width=30)
-        app.name_ent.insert(1,'name')
-        app.age_ent = CTkEntry(a, width=30)
-        app.age_ent.insert(1, '100')
+        app.name_entry = CTkEntry(a, width=30)
+        app.name_entry.insert(1, 'name')
+        app.age_entry = CTkEntry(a, width=30)
+        app.age_entry.insert(1, '100')
         app.v = CTkEntry(a, width=30)
         app.v.insert(1, '1')
-        app.location_ent = CTkEntry(a, width=30)
-        app.location_ent.insert(1, 'kovel')
-        app.phone_ent = CTkEntry(a, width=30)
-        app.phone_ent.insert(1, '123123')
+        app.location_entry = CTkEntry(a, width=30)
+        app.location_entry.insert(1, 'kovel')
+        app.phone_entry = CTkEntry(a, width=30)
+        app.phone_entry.insert(1, '123123')
 
 
         app.add_appointment()
@@ -65,11 +65,11 @@ class ApplicationTests(unittest.TestCase):
         app.location = 'Kovel'
         app.phone = '3123123'
 
-        app.name_ent = 'John Doe'
-        app.age_ent = '30'
+        app.name_entry = 'John Doe'
+        app.age_entry = '30'
         app.v = 1
-        app.location_ent = 'New York'
-        app.phone_ent = '1234567890'
+        app.location_entry = 'New York'
+        app.phone_entry = '1234567890'
 
         app.updatee()
         app.update1()
@@ -83,8 +83,8 @@ class ApplicationTests(unittest.TestCase):
         app.var3 = 1
         app.var4 = 'New York'
         app.var5 = '1234567890'
-        app.idnet = CTkEntry(a, width=30)
-        app.idnet.insert(1, '10')
+        app.id_net = CTkEntry(a, width=30)
+        app.id_net.insert(1, '10')
         app.ent1 = CTkEntry(a, width=30)
         app.ent2 = CTkEntry(a, width=30)
         app.ent3 = CTkEntry(a, width=30)
@@ -110,8 +110,8 @@ class ApplicationTests(unittest.TestCase):
 
     def test_delete2(self):
         app = Application(a)
-        app.idnet = CTkEntry(a, width=30)
-        app.idnet.insert(1, '10')
+        app.id_net = CTkEntry(a, width=30)
+        app.id_net.insert(1, '10')
         app.ent1 = CTkEntry(a, width=30)
         app.ent2 = CTkEntry(a, width=30)
         app.ent3 = CTkEntry(a, width=30)
