@@ -4,7 +4,7 @@ from tkinter.ttk import Separator
 from tkinter import messagebox
 from tkinter import *
 from db import Database
-
+import os
 
 class Application:
 
@@ -83,15 +83,17 @@ class Application:
 
         # ordering the ids
 
-        self.new = sorted(ids)
-        self.final_id = self.new[len(ids) - 1]
-
+        # self.new = sorted(ids)
+        # try:
+        #     self.final_id = self.new[len(ids) - 1]
+        # except:
+        #     self.final_id = 0
         #  display the logs in our frame
 
-        self.logs = CTkLabel(self.main, text="Total\n Appointments:", font=('arial', 10))
-        self.logs.place(x=280, y=350)
-        self.logs = CTkLabel(self.main, text=" " + str(self.final_id), width=8, height=1).place(x=360,
-                                                                                                y=360)
+        # self.logs = CTkLabel(self.main, text="Total\n Appointments:", font=('arial', 10))
+        # self.logs.place(x=280, y=350)
+        # self.logs = CTkLabel(self.main, text=" " + str(self.final_id), width=8, height=1).place(x=360,
+        #                                                                                         y=360)
 
         self.main.pack()
 
@@ -265,9 +267,30 @@ class Application:
         self.delete_frame.pack(fill='both', expand=True)
 
     def delete1(self):
-        self.input = self.id_net.get()
+        # self.db = Database('database.db')
+        # self.c = self.db.c
+        # self.conn = self.db.conn
+        # self.alldata = self.c.fetchall()
+
+        self.input = self.idnet.get()
         # execute sql
-        sql = "SELECT * FROM appointments WHERE id LIKE ?"
+        self.c.execute('SELECT id FROM appointments')
+        rows = self.c.fetchall()
+
+
+        if 'id_list' not in globals():
+            global id_list
+        id_list = []
+        for row in rows:
+            id_list.append(row[0])
+        print(f'id: {id_list}')
+        print(self.input)
+        #if self.input in id_list:
+        for i in self.list_of_deleted:
+            if i == self.input:
+                print('povna pezda')
+                break
+        sql = "SELECT * FROM appointments WHERE id=?"
         self.res = self.c.execute(sql, (self.input,))
         for self.row in self.res:
             self.name1 = self.row[1]
@@ -338,11 +361,12 @@ def menubar():
     file_menu = Menu(main_menu, tearoff=False)
     main_menu.add_cascade(label="Menu", menu=file_menu)
     file_menu.add_command(label="Home", command=b.homee)
-    file_menu.add_command(label="Show details", command=b.show_details)
+    file_menu.add_command(label="Show details", command=b.showdetails)
     file_menu.add_command(label="Update", command=b.updatee)
     file_menu.add_command(label="Delete", command=b.deletee)
     file_menu.add_separator()
     file_menu.add_command(label="Exit", command=window.quit)
+
 
 ids = []
 number = []
